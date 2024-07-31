@@ -36,8 +36,8 @@ pip install requests requests-toolbelt colorama
 1. **Clone the repository** or download the script files to your machine. 🖥️
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/ababoude/BillWordFinder.git
+   cd BillWordFinder
    ```
 
 2. **Prepare the input file**:
