@@ -5,12 +5,32 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
-def read(name, url, show_missed):
+def check_sumbitBar(name, url, show_missed):
     with open(name, 'r') as fichier:
         for line in fichier:
             word = line.strip()
             if word:
-                # Create the payload using MultipartEncoder
+                file_url = f"{url}/{word}.txt"
+                try:
+                    response = requests.head(file_url)
+                    if response.status_code == 404:
+                        if show_missed:
+                            print(Fore.RED + f"{word} [404] - Not Found")
+                    elif response.status_code == 500:
+                        if show_missed:
+                            print(Fore.BLUE + f"{word} [500] - Internal Server Error")
+                            print(Fore.BLUE + f"Response Text: {response.text}")
+                    else:
+                        print(Fore.GREEN + f"{word} [{response.status_code}] - Exists")
+                except requests.exceptions.RequestException as e:
+                    if show_missed:
+                        print(Fore.RED + f"{word} [ERROR: {e}]")
+
+def check_mysteryUrl(name, url, show_missed):
+    with open(name, 'r') as fichier:
+        for line in fichier:
+            word = line.strip()
+            if word:
                 m = MultipartEncoder(fields={'code': word})
                 headers = {
                     'accept': '*/*',
@@ -32,33 +52,46 @@ def read(name, url, show_missed):
                     response = requests.post(url, data=m, headers=headers)
                     if response.status_code == 404:
                         if show_missed:
-                            print(Fore.RED + f"{word} [404]")
+                            print(Fore.RED + f"{word} [404] - Not Found")
                     elif response.status_code == 500:
                         if show_missed:
                             print(Fore.BLUE + f"{word} [500] - Internal Server Error")
                             print(Fore.BLUE + f"Response Text: {response.text}")
                     else:
-                        print(Fore.GREEN + f"{word} [{response.status_code}]")
+                        print(Fore.GREEN + f"{word} [{response.status_code}] - Exists")
                 except requests.exceptions.RequestException as e:
                     if show_missed:
                         print(Fore.RED + f"{word} [ERROR: {e}]")
 
 def main():
     name = 'input.txt'
-    url = 'https://mystery.thisisnotawebsitedotcom.com/'
+    mystery_url = 'https://mystery.thisisnotawebsitedotcom.com/'
+    check_url = 'https://files.thisisnotawebsitedotcom.com/is-it-time-yet'
 
     script_dir = os.path.dirname(__file__)
     file_path = os.path.join(script_dir, name)
 
-    header = "Gravity Falls ARG : Bill Word Finder\nVers 1.1, by Ababoude (X : @ababoude_)"
+    header = "Gravity Falls ARG : Bill Word Finder\nVers 2.0, by Ababoude (X : @ababoude_)"
     header_line = '-' * len(header)
     print(Fore.YELLOW + header)
     print(Fore.YELLOW + header_line)
 
-    # Ask the user if they want to show missed results
-    show_missed = input("Do you want to display missed results ? (y/n): ").strip().lower() == 'y'
+    print(Fore.CYAN + "Select an option:")
+    print(Fore.CYAN + "1. Bruteforce Submit Bar")
+    print(Fore.CYAN + "2. Bruteforce Mystery URL")
 
-    read(file_path, url, show_missed)
+    choice = input("Enter the number of your choice: ").strip()
+
+    show_missed = input("Do you want to display missed results? (y/n): ").strip().lower() == 'y'
+
+    if choice == '1':
+        print(Fore.CYAN + "\nChecking words in mystery URL...\n" + Fore.RESET)
+        check_mysteryUrl(file_path, mystery_url, show_missed)
+    elif choice == '2':
+        print(Fore.CYAN + "\nChecking if files exist...\n" + Fore.RESET)
+        check_sumbitBar(file_path, check_url, show_missed)
+    else:
+        print(Fore.RED + "Invalid choice. Please enter 1 or 2.")
 
 if __name__ == "__main__":
     main()
