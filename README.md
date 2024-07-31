@@ -48,7 +48,7 @@ pip install requests requests-toolbelt colorama
    - Use the following command to execute the script:
 
      ```bash
-     python your_script.py
+     python BillWordFinder.py
      ```
 
    - You will be prompted to choose one of the available options:
