@@ -7,6 +7,7 @@ This script is a brute-force tool designed to help fans of *Gravity Falls* solve
 1. **Bruteforce Submit Bar**: Sends POST requests to a specific URL for each word in a text file and checks the response.
 2. **Bruteforce Mystery URL**: Checks if a file with each word as its name exists at a given URL using HEAD requests.
 3. **Bruteforce Computer codes**: Sends POST requests to a specific URL for each word in a text file and checks the response.
+4. **Generate Possible Combinations**: Creates and saves all possible combinations of characters up to a specified length to a file.
 
 ## Features ✨
 
@@ -18,9 +19,14 @@ This script is a brute-force tool designed to help fans of *Gravity Falls* solve
   - Checks for the existence of files at a specific URL for each word.
   - Displays whether the file exists or not (using HEAD requests). 📁✅
 
-- **Bruteforce Computer codes**:
+- **Bruteforce Computer Codes**:
   - Sends POST requests with words to a specified URL.
   - Displays results based on HTTP response codes (404 for not found, 500 for internal server error, etc.). 🚫🔍
+
+- **Generate Possible Combinations**:
+  - Creates all possible combinations of characters up to a specified length using a defined character set (e.g., letters, numbers, and special characters).
+  - Saves these combinations to `input.txt` for further use.
+  - Useful for generating potential words to test against ARG endpoints. 🔠🗂️
 
 ## Prerequisites 🛠️
 
@@ -60,6 +66,7 @@ pip install requests requests-toolbelt colorama
      - **1** for "Bruteforce Submit Bar" 
      - **2** for "Bruteforce Mystery URL"
      - **3** for "Bruteforce Computer codes"
+     - **4** for "Generate possible Combinations"
 
    - Then, the script will ask if you want to display missed results (404 responses or errors). ❓
 
@@ -78,6 +85,7 @@ Select an option:
 1. Bruteforce Submit Bar
 2. Bruteforce Mystery URL
 3. Bruteforce Computer [NEW]
+4. Generate possible Combinations
 Do you want to display missed results? (y/n): y
 
 Checking if computer have codes...

@@ -2,10 +2,33 @@ import os
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from colorama import Fore, Style, init
+import itertools
 
 init(autoreset=True)
 
+CHAR_SET = "abcdefghijklmnopqrstuvwxyz0123456789?"
+
+def generate_combinations(max_length):
+    """Generate all possible combinations up to max_length using CHAR_SET."""
+    for length in range(1, max_length + 1):
+        for combination in itertools.product(CHAR_SET, repeat=length):
+            yield ''.join(combination)
+
+def save_combinations_to_file(max_length, filename):
+    """Save all combinations up to max_length to a file."""
+    print("Generating all possible combinations to file 'input.txt'...")
+    with open(filename, 'w') as file:
+        for combination in generate_combinations(max_length):
+            file.write(combination + '\n')
+    print(Fore.GREEN + f"Combinations saved to {filename}")
+
+def save_successful_combination(word):
+    """Append successful combinations to 'success.txt'."""
+    with open('success.txt', 'a') as success_file:
+        success_file.write(word + '\n')
+
 def check_link(name, url, show_missed):
+    """Check if files exist at given URL based on words in the file."""
     with open(name, 'r') as fichier:
         for line in fichier:
             word = line.strip()
@@ -22,11 +45,13 @@ def check_link(name, url, show_missed):
                             print(Fore.BLUE + f"Response Text: {response.text}")
                     else:
                         print(Fore.GREEN + f"{word} [{response.status_code}] - Exists")
+                        save_successful_combination(word)
                 except requests.exceptions.RequestException as e:
                     if show_missed:
                         print(Fore.RED + f"{word} [ERROR: {e}]")
 
 def check_word(name, url, show_missed):
+    """Check if words in the file are valid at given URL with POST requests."""
     with open(name, 'r') as fichier:
         for line in fichier:
             word = line.strip()
@@ -59,6 +84,7 @@ def check_word(name, url, show_missed):
                             print(Fore.BLUE + f"Response Text: {response.text}")
                     else:
                         print(Fore.GREEN + f"{word} [{response.status_code}] - Exists")
+                        save_successful_combination(word)
                 except requests.exceptions.RequestException as e:
                     if show_missed:
                         print(Fore.RED + f"{word} [ERROR: {e}]")
@@ -72,7 +98,7 @@ def main():
     script_dir = os.path.dirname(__file__)
     file_path = os.path.join(script_dir, name)
 
-    header = "Gravity Falls ARG : Bill Word Finder\nVers 3.0, by Ababoude (X : @ababoude_)"
+    header = "Gravity Falls ARG : Bill Word Finder\nVers 3.0, by Ababoude (X : @ababoude_) | Contributers: yBeta (Discord: @ybeta)"
     header_line = '-' * len(header)
     print(Fore.YELLOW + header)
     print(Fore.YELLOW + header_line)
@@ -80,11 +106,13 @@ def main():
     print(Fore.CYAN + "Select an option:")
     print(Fore.CYAN + "1. Bruteforce Submit Bar")
     print(Fore.CYAN + "2. Bruteforce Mystery URL")
-    print(Fore.CYAN + "3. Bruteforce Computer codes"+Fore.MAGENTA + " [NEW]")
+    print(Fore.CYAN + "3. Bruteforce Computer codes" + Fore.MAGENTA + " [NEW]")
+    print(Fore.CYAN + "4. Generate possible Combinations")
 
     choice = input("Enter the number of your choice: ").strip()
 
-    show_missed = input("Do you want to display missed results? (y/n): ").strip().lower() == 'y'
+    if choice == '1' or choice == '2' or choice == '3':
+        show_missed = input("Do you want to display missed results? (y/n): ").strip().lower() == 'y'
 
     if choice == '1':
         print(Fore.CYAN + "\nChecking words in mystery URL...\n" + Fore.RESET)
@@ -95,8 +123,11 @@ def main():
     elif choice == '3':
         print(Fore.CYAN + "\nChecking if computer have codes...\n" + Fore.RESET)
         check_word(file_path, codes_url, show_missed)
+    elif choice == '4':
+        max_length = int(input("Enter the maximum length for combinations: ").strip())
+        save_combinations_to_file(max_length, file_path)
     else:
-        print(Fore.RED + "Invalid choice. Please enter 1, 2 or 3.")
+        print(Fore.RED + "Invalid choice. Please enter 1, 2, 3, or 4.")
 
 if __name__ == "__main__":
     main()
