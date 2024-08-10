@@ -2,7 +2,7 @@
 
 ## Description 📜
 
-This script is a brute-force tool designed to help fans of *Gravity Falls* solve challenges related to the Bill Cipher ARG (Alternate Reality Game). In 2024, this script can be used to check if specific words are associated with certain ARG endpoints. The script offers two main functionalities:
+This script is a brute-force tool designed to help fans of *Gravity Falls* solve challenges related to the Bill Cipher ARG (Alternate Reality Game). In 2024, this script can be used to check if specific words are associated with certain ARG endpoints. The script offers three main functionalities:
 
 1. **Bruteforce Submit Bar**: Sends POST requests to a specific URL for each word in a text file and checks the response.
 2. **Bruteforce Mystery URL**: Checks if a file with each word as its name exists at a given URL using HEAD requests.
