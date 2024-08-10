@@ -4,8 +4,9 @@
 
 This script is a brute-force tool designed to help fans of *Gravity Falls* solve challenges related to the Bill Cipher ARG (Alternate Reality Game). In 2024, this script can be used to check if specific words are associated with certain ARG endpoints. The script offers two main functionalities:
 
-1. **Bruteforce Submit Bar**: Sends POST requests to a specific URL for each word in a text file and checks the response. 📤
-2. **Bruteforce Mystery URL**: Checks if a file with each word as its name exists at a given URL using HEAD requests. 🔗
+1. **Bruteforce Submit Bar**: Sends POST requests to a specific URL for each word in a text file and checks the response.
+2. **Bruteforce Mystery URL**: Checks if a file with each word as its name exists at a given URL using HEAD requests.
+3. **Bruteforce Computer codes**: Sends POST requests to a specific URL for each word in a text file and checks the response.
 
 ## Features ✨
 
@@ -16,6 +17,10 @@ This script is a brute-force tool designed to help fans of *Gravity Falls* solve
 - **Bruteforce Mystery URL**:
   - Checks for the existence of files at a specific URL for each word.
   - Displays whether the file exists or not (using HEAD requests). 📁✅
+
+- **Bruteforce Computer codes**:
+  - Sends POST requests with words to a specified URL.
+  - Displays results based on HTTP response codes (404 for not found, 500 for internal server error, etc.). 🚫🔍
 
 ## Prerequisites 🛠️
 
@@ -52,8 +57,9 @@ pip install requests requests-toolbelt colorama
      ```
 
    - You will be prompted to choose one of the available options:
-     - **1** for "Bruteforce Submit Bar" 📨
-     - **2** for "Bruteforce Mystery URL" 🔍
+     - **1** for "Bruteforce Submit Bar" 
+     - **2** for "Bruteforce Mystery URL"
+     - **3** for "Bruteforce Computer codes"
 
    - Then, the script will ask if you want to display missed results (404 responses or errors). ❓
 
@@ -66,21 +72,19 @@ Here's an example of running the script:
 
 ```
 Gravity Falls ARG : Bill Word Finder
-Vers 1.1, by Ababoude (X : @ababoude_)
---------------------------------------
-
+Vers 3.0, by Ababoude (X : @ababoude_)
+---------------------------------------------------------------------------
 Select an option:
 1. Bruteforce Submit Bar
 2. Bruteforce Mystery URL
-Enter the number of your choice: 2
+3. Bruteforce Computer [NEW]
 Do you want to display missed results? (y/n): y
 
-Checking if files exist...
+Checking if computer have codes...
 
-word1 [404] - Not Found
-word2 [200] - Exists
+bill [200] - Exists
 ```
 
 ## Contributing 🤝
 
-Contributions are welcome! If you have ideas to improve the script or have found bugs, please submit an [issue](https://github.com/your-username/your-repo/issues) or create a [pull request](https://github.com/your-username/your-repo/pulls). 💡
+Contributions are welcome! If you have ideas to improve the script or have found bugs, please submit an [issue](https://github.com/ababoude/BillWordFinder/issues) or create a [pull request](https://github.com/ababoude/BillWordFinder/pulls). 💡

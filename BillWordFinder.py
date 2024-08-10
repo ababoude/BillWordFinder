@@ -5,7 +5,7 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
-def check_sumbitBar(name, url, show_missed):
+def check_link(name, url, show_missed):
     with open(name, 'r') as fichier:
         for line in fichier:
             word = line.strip()
@@ -26,7 +26,7 @@ def check_sumbitBar(name, url, show_missed):
                     if show_missed:
                         print(Fore.RED + f"{word} [ERROR: {e}]")
 
-def check_mysteryUrl(name, url, show_missed):
+def check_word(name, url, show_missed):
     with open(name, 'r') as fichier:
         for line in fichier:
             word = line.strip()
@@ -66,12 +66,13 @@ def check_mysteryUrl(name, url, show_missed):
 def main():
     name = 'input.txt'
     mystery_url = 'https://mystery.thisisnotawebsitedotcom.com/'
-    check_url = 'https://files.thisisnotawebsitedotcom.com/is-it-time-yet'
+    files_url = 'https://files.thisisnotawebsitedotcom.com/is-it-time-yet'
+    codes_url = 'https://codes.thisisnotawebsitedotcom.com/'
 
     script_dir = os.path.dirname(__file__)
     file_path = os.path.join(script_dir, name)
 
-    header = "Gravity Falls ARG : Bill Word Finder\nVers 2.0, by Ababoude (X : @ababoude_)"
+    header = "Gravity Falls ARG : Bill Word Finder\nVers 3.0, by Ababoude (X : @ababoude_)"
     header_line = '-' * len(header)
     print(Fore.YELLOW + header)
     print(Fore.YELLOW + header_line)
@@ -79,6 +80,7 @@ def main():
     print(Fore.CYAN + "Select an option:")
     print(Fore.CYAN + "1. Bruteforce Submit Bar")
     print(Fore.CYAN + "2. Bruteforce Mystery URL")
+    print(Fore.CYAN + "3. Bruteforce Computer codes"+Fore.MAGENTA + " [NEW]")
 
     choice = input("Enter the number of your choice: ").strip()
 
@@ -86,12 +88,15 @@ def main():
 
     if choice == '1':
         print(Fore.CYAN + "\nChecking words in mystery URL...\n" + Fore.RESET)
-        check_mysteryUrl(file_path, mystery_url, show_missed)
+        check_word(file_path, mystery_url, show_missed)
     elif choice == '2':
         print(Fore.CYAN + "\nChecking if files exist...\n" + Fore.RESET)
-        check_sumbitBar(file_path, check_url, show_missed)
+        check_link(file_path, files_url, show_missed)
+    elif choice == '3':
+        print(Fore.CYAN + "\nChecking if computer have codes...\n" + Fore.RESET)
+        check_word(file_path, codes_url, show_missed)
     else:
-        print(Fore.RED + "Invalid choice. Please enter 1 or 2.")
+        print(Fore.RED + "Invalid choice. Please enter 1, 2 or 3.")
 
 if __name__ == "__main__":
     main()
