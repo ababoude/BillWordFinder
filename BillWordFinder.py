@@ -6,29 +6,58 @@ import itertools
 
 init(autoreset=True)
 
+AUTHOR = "Ababoude (X : Ababoude)"
+VERSION = "3.1"
+CONTRIBUTORS = ["yBeta (Discord: @ybeta)"]
+FILENAME = 'input.txt'
+TOOLS = [
+    {"name" : "Bruteforce Submit Bar", "newest" : False, "function" : "check_word", "isResulting" : True},
+    {"name" : "Bruteforce Mystery URL", "newest" : False, "function" : "check_link", "isResulting" : True},
+    {"name" : "Bruteforce Computer codes", "newest" : True, "function" : "check_word", "isResulting" : True},
+    {"name" : "Generate possible Combinations", "newest" : True, "function" : "save_combinations_to_file", "isResulting" : False},
+]
+
 CHAR_SET = "abcdefghijklmnopqrstuvwxyz0123456789?"
+SCRIPT_DIR = os.path.dirname(__file__)
+FILE_PATH = os.path.join(SCRIPT_DIR, FILENAME)
 
 def generate_combinations(max_length):
-    """Generate all possible combinations up to max_length using CHAR_SET."""
+    """ 
+    EN : Generate all possible combinations up to max_length using CHAR_SET.
+    FR : Générer toutes les combinaisons possibles jusqu'à max_length en utilisant CHAR_SET.
+    """
     for length in range(1, max_length + 1):
         for combination in itertools.product(CHAR_SET, repeat=length):
             yield ''.join(combination)
 
 def save_combinations_to_file(max_length, filename):
-    """Save all combinations up to max_length to a file."""
-    print("Generating all possible combinations to file 'input.txt'...")
+    """ 
+    EN : Save all combinations up to max_length to a file.
+    FR : Enregistrer toutes les combinaisons jusqu'à max_length dans un fichier.
+    """
+    print(Fore.GREEN + "Generating all possible combinations to file 'input.txt'...")
     with open(filename, 'w') as file:
+        n = 1
         for combination in generate_combinations(max_length):
             file.write(combination + '\n')
+            print ("\033[?25l"+Fore.YELLOW+f"Number of generated words : {n}", end="\r")
+            n +=1
+        print("\033[?25h", end="")
     print(Fore.GREEN + f"Combinations saved to {filename}")
 
 def save_successful_combination(word):
-    """Append successful combinations to 'success.txt'."""
+    """ 
+    EN : Append successful combinations to 'success.txt'.
+    FR : Ajouter les combinaisons réussies au fichier 'success.txt'.
+    """
     with open('success.txt', 'a') as success_file:
         success_file.write(word + '\n')
 
 def check_link(name, url, show_missed):
-    """Check if files exist at given URL based on words in the file."""
+    """ 
+    EN : Check if files exist at given URL based on words in the file.
+    FR : Vérifier si des fichiers existent à l'URL donnée en fonction des mots du fichier.
+    """
     with open(name, 'r') as fichier:
         for line in fichier:
             word = line.strip()
@@ -51,7 +80,10 @@ def check_link(name, url, show_missed):
                         print(Fore.RED + f"{word} [ERROR: {e}]")
 
 def check_word(name, url, show_missed):
-    """Check if words in the file are valid at given URL with POST requests."""
+    """ 
+    EN : Check if words in the file are valid at given URL with POST requests.
+    FR : Vérifier si les mots du fichier sont valides à l'URL donnée avec des requêtes POST.
+    """
     with open(name, 'r') as fichier:
         for line in fichier:
             word = line.strip()
@@ -89,45 +121,98 @@ def check_word(name, url, show_missed):
                     if show_missed:
                         print(Fore.RED + f"{word} [ERROR: {e}]")
 
+def count_lines(filename):
+    """ 
+    EN : Count the number of lines in a text file
+    FR : Compte le nombre de lignes dans un fichier texte
+    """
+    with open(filename, 'r') as file:
+        count = 0
+        for _ in file:
+            count += 1
+    return count
+
+def menu(title):
+    """ 
+    EN : Function to display redundant menus and menus.
+    FR : Fonction pour afficher les menus et phrases redondantes.
+    """
+    if title.lower() == "title":
+        os.system('cls' if os.name == 'nt' else 'clear')
+        header = "Vers " + VERSION + ", by " + AUTHOR + " | Contributers: " + ";".join(CONTRIBUTORS)
+        color = Fore.YELLOW
+
+        print(color + "Gravity Falls ARG : Bill Word Finder")
+        print(color + header)
+        print(color + '-' * len(header))
+    elif title.lower() == "tools":
+        n = 1
+        menu("loaded")
+        for tool in TOOLS:
+            color = Fore.BLUE
+            indexColor = Fore.RED
+            newestColor = Fore.MAGENTA
+            text = indexColor + str(n) + ". " + color + tool["name"]
+
+            if tool["newest"]:
+                text += newestColor + " [NEW]"
+            print(text)
+            n += 1
+        print(Fore.RED + f"{len(TOOLS) + 1}. Exit\n")
+        while True:
+            try:
+                index = int(input("Enter the number of tool to use it : ").strip())
+                if index == len(TOOLS) + 1:
+                    raise KeyboardInterrupt
+                elif index < 1 or index > len(TOOLS):
+                    raise IndexError
+                return index 
+            except KeyboardInterrupt:
+                print(Fore.RED + "\nScript interrupted. Exiting...")
+                exit()
+            except:
+                print(Fore.RED + "ERROR : Please enter a valid number.")
+    elif title.lower() == "missed":
+        while True:
+            try:
+                show_missed = input("Do you want to display missed results? (y/n): ").strip().lower()
+                if show_missed not in ["y", "n"]:
+                    raise ValueError
+                return show_missed
+            except KeyboardInterrupt:
+                print(Fore.RED + "\nScript interrupted. Exiting...")
+                exit()
+            except:
+                print(Fore.RED + "ERROR : Please enter a valid response (y or n).")
+    elif title.lower() == "combinations":
+        max_length = int(input("Enter the maximum length for combinations: ").strip())
+        return max_length
+    elif title.lower() == "loaded":
+        text = "Words Loaded : "+str(count_lines(FILE_PATH))
+        print(Fore.GREEN+ "+"+ "-" * (len(text)+2) + "+")
+        print(Fore.GREEN + "| " + "Words loaded : "+str(count_lines(FILE_PATH)) + " |")
+        print(Fore.GREEN + "+"+ "-" * (len(text)+2) + "+\n")
+
 def main():
-    name = 'input.txt'
     mystery_url = 'https://mystery.thisisnotawebsitedotcom.com/'
     files_url = 'https://files.thisisnotawebsitedotcom.com/is-it-time-yet'
     codes_url = 'https://codes.thisisnotawebsitedotcom.com/'
 
-    script_dir = os.path.dirname(__file__)
-    file_path = os.path.join(script_dir, name)
+    menu("title")
+    choice = menu("tools")
 
-    header = "Gravity Falls ARG : Bill Word Finder\nVers 3.0, by Ababoude (X : @ababoude_) | Contributers: yBeta (Discord: @ybeta)"
-    header_line = '-' * len(header)
-    print(Fore.YELLOW + header)
-    print(Fore.YELLOW + header_line)
+    if TOOLS[choice-1]["isResulting"] == True :
+        show_missed = menu("missed")
 
-    print(Fore.CYAN + "Select an option:")
-    print(Fore.CYAN + "1. Bruteforce Submit Bar")
-    print(Fore.CYAN + "2. Bruteforce Mystery URL")
-    print(Fore.CYAN + "3. Bruteforce Computer codes" + Fore.MAGENTA + " [NEW]")
-    print(Fore.CYAN + "4. Generate possible Combinations")
-
-    choice = input("Enter the number of your choice: ").strip()
-
-    if choice == '1' or choice == '2' or choice == '3':
-        show_missed = input("Do you want to display missed results? (y/n): ").strip().lower() == 'y'
-
-    if choice == '1':
-        print(Fore.CYAN + "\nChecking words in mystery URL...\n" + Fore.RESET)
-        check_word(file_path, mystery_url, show_missed)
-    elif choice == '2':
-        print(Fore.CYAN + "\nChecking if files exist...\n" + Fore.RESET)
-        check_link(file_path, files_url, show_missed)
-    elif choice == '3':
-        print(Fore.CYAN + "\nChecking if computer have codes...\n" + Fore.RESET)
-        check_word(file_path, codes_url, show_missed)
-    elif choice == '4':
-        max_length = int(input("Enter the maximum length for combinations: ").strip())
-        save_combinations_to_file(max_length, file_path)
-    else:
-        print(Fore.RED + "Invalid choice. Please enter 1, 2, 3, or 4.")
+    if choice == 1:
+        check_word(FILE_PATH, mystery_url, show_missed)
+    elif choice == 2:
+        check_link(FILE_PATH, files_url, show_missed)
+    elif choice == 3:
+        check_word(FILE_PATH, codes_url, show_missed)
+    elif choice == 4:
+        max_length = menu("combinations")
+        save_combinations_to_file(max_length, FILE_PATH)
 
 if __name__ == "__main__":
     main()
